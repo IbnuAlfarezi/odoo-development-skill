@@ -158,3 +158,4 @@ For corporate holding groups managing subsidiaries with different currencies and
 | **Inter-Company Rules** | Configured in `res.company` partner form. | Unified settings in General Settings per company. | Automated inter-company delivery status tracking between SO and PO. | Instant real-time two-way confirmation and automated payment offset. |
 | **Security Context** | `company_ids` evaluated via global `ir.rule`. | `allowed_company_ids` context variable standardized. | Fast multi-company domain caching in ORM. | **`ir.access` clean evaluation**: Record rules leverage `company_ids` without performance degradation. |
 | **Company Switcher UI** | Basic dropdown selector with full page reload. | Multi-checkbox selector without page reloads. | Fast asynchronous session switching. | Touch-optimized company switch widget with visual branch badges. |
+

@@ -170,6 +170,7 @@ When the user asks for a specific functionality, search the categorized `skills/
 | subscription, recurring plan, auto invoicing, auto debit, renewal, churn, mrr | `skills/functional/flow-subscription-recurring-contracts.md` |
 | functional version differences, v14 v15 v16 v17 v18 v19 v20, migration flow | `skills/functional/version-functional-differences.md` |
 | multi company, branch, inter company rules, subsidiary, financial consolidation, transit | `skills/functional/flow-multi-company-intercompany.md` |
+| accounts receivable, accounts payable, credit limit, dunning, 3 way matching, treasury, closing | `skills/functional/flow-corporate-finance-ap-ar.md` |
 
 ### Version-Specific Pattern Files
 
