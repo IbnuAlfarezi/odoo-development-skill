@@ -106,7 +106,20 @@ Tuple commands are still accepted by the ORM (`Command` is an `IntEnum`); `Comma
 | Raw SQL strings with params | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ (prefer `SQL`) |
 | `SQL()` builder | ➖ | ➖ | ➖ | ✅ | ✅ | ✅ REC | ✅ REC |
 | `SQL.identifier()` | ➖ | ➖ | ➖ | ✅ | ✅ | ✅ | ✅ |
+| SQL View (`_auto=False`): `init()` | ✅ | ✅ | ✅ | ✅ | ⚠️ DEP | ⚠️ DEP | ❌ REM |
+| SQL View: `property _table_query` | ➖ | ➖ | ➖ | ➖ | ✅ REQ | ✅ REQ | ✅ REQ |
+| Cache sync: `flush_all()` / `flush_model()` | ✅ REQ | ✅ REQ | ✅ REQ | ✅ REQ | ✅ REQ | ✅ REQ | ✅ REQ |
+| `cr.commit()` in business models | ❌ ANTI | ❌ ANTI | ❌ ANTI | ❌ ANTI | ❌ ANTI | ❌ ANTI | ❌ ANTI |
 | `odoo.osv.expression` | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ❌ REM (`fields.Domain`) |
+
+### Controllers / HTTP
+
+| Pattern | v14 | v15 | v16 | v17 | v18 | v19 | v20 |
+|---------|-----|-----|-----|-----|-----|-----|-----|
+| `@http.route(type='json')` | ✅ | ✅ | ✅ | ✅ | ✅ | ⚠️ DEP | ❌ REM |
+| `@http.route(type='jsonrpc')` | ➖ | ➖ | ➖ | ➖ | ➖ | ✅ | ✅ |
+| `@http.route(type='http')` | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ |
+| `content_disposition` import | `odoo.http` | `odoo.http` | `odoo.http` | `odoo.http` | `odoo.http` | `odoo.http` | `odoo.http.stream` |
 
 ### JavaScript/OWL
 
@@ -120,8 +133,8 @@ Tuple commands are still accepted by the ORM (`Command` is an `IntEnum`); `Comma
 | OWL 3.x | ➖ | ➖ | ➖ | ➖ | ➖ | ➖ | ✅ |
 | jQuery / `publicWidget` | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ❌ REM |
 | `Interaction` (frontend) | ➖ | ➖ | ➖ | ➖ | ➖ | ✅ | ✅ |
-| QUnit | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ❌ REM |
-| Hoot | ➖ | ➖ | ➖ | ➖ | ✅ | ✅ | ✅ |
+| QUnit | ✅ | ✅ | ✅ | ✅ | ⚠️ DEP | ⚠️ DEP | ❌ REM |
+| Hoot (`@odoo/hoot`) | ➖ | ➖ | ➖ | ➖ | ✅ | ✅ | ✅ |
 | FontAwesome CSS | ✅ | ✅ | ✅ | ✅ | ✅ | ✅ | ❌ (Material Symbols) |
 
 ### Security/Rules
@@ -224,14 +237,18 @@ Tuple commands are still accepted by the ORM (`Command` is an `IntEnum`); `Comma
 ### v17 → v18
 1. `<tree>` → `<list>`, `<chatter/>`
 2. `check_access_rights`/`check_access_rule` → `check_access` (old ones deprecated)
-3. Start using `SQL()` builder
-4. Type hints optional (recommended on public APIs)
+3. Start using `SQL()` builder & `property _table_query` for reporting SQL views
+4. `@api.readonly` available for read-only RPC methods
+5. Adopt `@odoo/hoot` test runner & `registry.category("web_tour.tours")`
+6. Type hints optional (recommended on public APIs)
 
 ### v18 → v19
 1. `_sql_constraints` → `models.Constraint` / `models.Index`
 2. `groups_id` → `group_ids`, `users` → `user_ids`, categories → `res.groups.privilege`
-3. `read_group` deprecated → `_read_group` / `formatted_read_group`
-4. OWL stays 2.x (2.8)
+3. `@route(type='json')` deprecated → `type='jsonrpc'`
+4. `read_group` deprecated → `_read_group` / `formatted_read_group`
+5. `name_get()` removed completely → use `_compute_display_name`
+6. OWL stays 2.x (2.8)
 
 ### v19 → v20
 1. **MUST** convert `ir.model.access.csv` + `ir.rule` to `security/ir.access.csv`

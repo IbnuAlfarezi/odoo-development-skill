@@ -30,16 +30,27 @@
 
 ## Version-Specific Knowledge Files
 
+### Single-Version Master Guides
 | Version | File |
 |---------|------|
-| Odoo 14.0 | `odoo-version-knowledge-14.md` |
-| Odoo 15.0 | `odoo-version-knowledge-15.md` |
-| Odoo 16.0 | `odoo-version-knowledge-16.md` |
-| Odoo 17.0 | `odoo-version-knowledge-17.md` |
-| Odoo 18.0 | `odoo-version-knowledge-18.md` |
-| Odoo 19.0 | `odoo-version-knowledge-19.md` |
-| Odoo 20.0 | `odoo-version-knowledge-20.md` |
-| 19.0 → 20.0 migration | `odoo-version-knowledge-19-20.md` |
+| Odoo 14.0 | `skills/versions/odoo-version-knowledge-14.md` |
+| Odoo 15.0 | `skills/versions/odoo-version-knowledge-15.md` |
+| Odoo 16.0 | `skills/versions/odoo-version-knowledge-16.md` |
+| Odoo 17.0 | `skills/versions/odoo-version-knowledge-17.md` |
+| Odoo 18.0 | `skills/versions/odoo-version-knowledge-18.md` |
+| Odoo 19.0 | `skills/versions/odoo-version-knowledge-19.md` |
+| Odoo 20.0 | `skills/versions/odoo-version-knowledge-20.md` |
+
+### Version Migration Guides
+| Migration Path | File |
+|----------------|------|
+| 14.0 → 15.0 | `skills/versions/odoo-version-knowledge-14-15.md` |
+| 15.0 → 16.0 | `skills/versions/odoo-version-knowledge-15-16.md` |
+| 16.0 → 17.0 | `skills/versions/odoo-version-knowledge-16-17.md` |
+| 17.0 → 18.0 | `skills/versions/odoo-version-knowledge-17-18.md` |
+| 18.0 → 19.0 | `skills/versions/odoo-version-knowledge-18-19.md` |
+| 19.0 → 20.0 | `skills/versions/odoo-version-knowledge-19-20.md` |
+| All Versions Comparative | `skills/versions/odoo-version-knowledge-all.md` |
 
 ## Breaking Changes Summary
 
@@ -71,10 +82,13 @@
 |-----------|--------|--------|
 | `_check_company_auto` | Recommended (available since 13.0) | Auto company validation |
 | `check_company` | On fields (available since 13.0) | Field-level validation |
-| Type hints | Recommended | Better IDE support |
-| `SQL()` builder | Recommended | Safer SQL queries |
+| `@api.readonly` | Introduced | Marks read-only RPC methods |
+| Type hints | Recommended | Better IDE support & type checking |
+| `SQL()` builder | Recommended | Safer, composable SQL queries |
+| SQL Views (`_auto = False`) | `property _table_query` | Replaces raw SQL `init()` |
 | `<tree>` → `<list>`, `<chatter/>` | Views | Rename in archs and `view_mode` |
 | `check_access()` | Replaces `check_access_rights`/`check_access_rule` (deprecated) | Update calls |
+| Web Tours & Testing | `web_tour.tours` registry & `@odoo/hoot` | Modern test runner |
 
 > Record rule domains use `company_ids` / `company_id` in every version; `allowed_company_ids` is a
 > context key and is **not** defined in the rule evaluation context.
@@ -86,6 +100,8 @@
 | `SQL()` builder | Recommended (raw SQL still accepted) | Recommended |
 | SQL constraints | `models.Constraint` / `models.Index` (`_sql_constraints` ignored) | Must migrate |
 | Users/groups | `groups_id` → `group_ids`, `users` → `user_ids`, `res.groups.privilege` | Must migrate |
+| Controller routes | `@route(type='json')` deprecated → `type='jsonrpc'` | Update routes |
+| Display name | `name_get()` removed completely | Use `_compute_display_name` |
 | OWL | Still 2.x (2.8) | No framework change |
 
 ### v19 → v20
@@ -137,10 +153,14 @@ from odoo import Command  # v16+
 _check_company_auto = True  # v18+
 check_company=True  # v18+
 name: str = fields.Char()  # Type hints, v18+
+@property
+def _table_query(self):  # v18+ SQL view property
+    return SQL(...)
 
 # v19 indicators
 _name_uniq = models.Constraint('UNIQUE(name)', "...")  # models.Constraint (19.0+)
 'group_ids': [Command.link(group.id)]  # res.users.group_ids (renamed in 19.0)
+@http.route(..., type='jsonrpc')  # v19+ (type='json' deprecated)
 
 # v20 indicators
 'security/ir.access.csv'  # in manifest 'data'
@@ -157,6 +177,12 @@ from odoo.http.stream import content_disposition
 
 <!-- v17+: direct attributes -->
 <field name="x" invisible="condition"/>
+
+<!-- v18+: list view tag and chatter tag -->
+<list string="Orders">
+    <field name="name"/>
+</list>
+<chatter/>
 ```
 
 ### JavaScript Indicators

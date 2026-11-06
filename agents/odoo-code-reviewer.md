@@ -42,9 +42,17 @@ First, identify the module's target Odoo version:
 ### Step 2: Load Version-Specific Knowledge
 
 Based on detected version, load:
-- `odoo-security-guide-{version}.md`
-- `odoo-model-patterns-{version}.md`
-- `odoo-module-generator-{version}.md`
+- Core version guides:
+  - `skills/security/odoo-security-guide-{version}.md`
+  - `skills/versions/odoo-model-patterns-{version}.md`
+  - `skills/versions/odoo-module-generator-{version}.md`
+  - `skills/frontend/odoo-owl-components-{version}.md` (if OWL/frontend present)
+- Production audit patterns:
+  - `skills/security/sudo-security-audit-patterns.md` (Safe sudo scoping, IDOR prevention, field vs XML security)
+  - `skills/database/concurrency-locking-patterns.md` (Row locking, savepoints, cr.commit prohibition)
+  - `skills/database/advanced-sql-indexing-patterns.md` (ORM cache flush & invalidation for raw SQL)
+  - `skills/backend/extensible-hook-patterns.md` (Extensible _prepare_* hooks, anti-OOM pagination)
+  - `skills/testing/form-testing-patterns.md` & `skills/testing/mocking-tour-testing-patterns.md` (Form & Tour testing, mocking)
 
 ### Step 3: Systematic Review
 
@@ -53,53 +61,56 @@ Review each component category:
 ## Review Categories
 
 ### 1. Manifest Review
-- [ ] Version format correct
-- [ ] Dependencies complete
-- [ ] Data files listed
-- [ ] Assets declared (v15+)
-- [ ] License appropriate
+- [ ] Version format correct (`{version}.x.y.z`)
+- [ ] Dependencies complete and accurate
+- [ ] Data files listed in load order (security first, then data, views, actions, menus)
+- [ ] Assets declared in manifest `assets` bundle (v15+)
+- [ ] License appropriate (e.g. LGPL-3, OEEL-1)
 - [ ] Category set
 
 ### 2. Model Review
-- [ ] Proper inheritance
-- [ ] Correct decorators for version
-- [ ] Field definitions follow patterns
-- [ ] Computed fields optimized
-- [ ] Constraints properly defined
+- [ ] Proper inheritance (`_inherit` / `_inherits`)
+- [ ] Correct decorators for version (`@api.model_create_multi`, `@api.depends`, etc.)
+- [ ] Field definitions follow patterns and naming conventions
+- [ ] Computed fields optimized (stored computed fields have dependencies, non-stored computed have minimal footprint)
+- [ ] Constraints properly defined (`@api.constrains` or `models.Constraint` in v19+)
 - [ ] CRUD methods follow version patterns
+- [ ] **NO `cr.commit()`** calls inside business methods (breaks transaction atomicity and test rollbacks)
+- [ ] Extensible `_prepare_*` hooks provided instead of monolithic overrides
+- [ ] In Odoo 18+: SQL views (`_auto = False`) use `property _table_query` instead of `init()`
 
 ### 3. Security Review
-- [ ] Access rights defined for all models
-- [ ] Record rules for multi-company
-- [ ] No SQL injection vulnerabilities
-- [ ] No sudo() abuse
-- [ ] Field-level security where needed
-- [ ] No hardcoded IDs
+- [ ] Access rights defined for all models (`ir.model.access.csv` in v14-v19, `security/ir.access.csv` in v20)
+- [ ] Record rules for multi-company (using `company_ids` / `company_id`, NEVER `allowed_company_ids`)
+- [ ] No SQL injection vulnerabilities (use `SQL()` builder or parameterized query)
+- [ ] **No `sudo()` abuse / IDOR vulnerabilities**: Never use `sudo()` directly on user-supplied IDs without verifying ownership or `check_access_rule`
+- [ ] **Field-level security**: Python field `groups="..."` enforced on model (XML `groups="..."` only controls UI visibility!)
+- [ ] No hardcoded IDs in Python code or XML (use XML IDs / External IDs)
 
 ### 4. View Review
-- [ ] Version-appropriate syntax
-- [ ] Proper visibility controls
-- [ ] Group restrictions applied
-- [ ] Accessible design
-- [ ] Consistent naming
+- [ ] Version-appropriate syntax (no `attrs`/`states` in v17+)
+- [ ] In Odoo 18+: `<list>` tag instead of deprecated `<tree>`, `<chatter/>` tag instead of `<div class="oe_chatter">`
+- [ ] Proper visibility controls (`invisible="condition"`, `readonly="condition"`)
+- [ ] Accessible design and consistent naming
 
 ### 5. Performance Review
-- [ ] Indexed search fields
+- [ ] Indexed search/filter fields (`index=True` or `models.Index` in v19+)
 - [ ] Stored computed fields where appropriate
-- [ ] No N+1 query patterns
-- [ ] Efficient batch operations
-- [ ] Prefetch usage
+- [ ] No N+1 query patterns (efficient use of ORM prefetch and batching)
+- [ ] **Raw SQL Cache Sync**: If `cr.execute()` is used, verify cache synchronization (`env.flush_all()`, `invalidate_recordset()`, `modified()`)
 
 ### 6. OWL/JavaScript Review (if applicable)
-- [ ] Correct OWL version for Odoo version
-- [ ] Proper service usage
-- [ ] Registry registration
-- [ ] Template structure
+- [ ] Correct OWL version for Odoo version (OWL 1 in v15, OWL 2 in v16-v19, OWL 3 in v20)
+- [ ] Proper service usage (`useService("orm")`, `useService("notification")`)
+- [ ] Registry registration (`registry.category(...)`)
+- [ ] Template structure and clean patching with `patch()`
 
 ### 7. Test Coverage
-- [ ] Unit tests present
-- [ ] Security tests
-- [ ] Edge cases covered
+- [ ] Unit tests present (`TransactionCase` / `TaggedCounter`)
+- [ ] Form view simulation tests (`odoo.tests.Form`) for onchange and default values
+- [ ] Tour tests (`HttpCase` with `start_tour`) for critical frontend workflows
+- [ ] External API isolation with `unittest.mock.patch` (no network calls in tests)
+- [ ] Security access tests (testing with restricted user)
 
 ## Output Format
 
@@ -166,16 +177,22 @@ Review each component category:
 - Verify direct visibility attributes
 
 ### Odoo 18
-- Check `_check_company_auto`
-- Check `check_company` on fields
-- Type hints optional
-- Recommend SQL builder
+- Check `<list>` tag instead of `<tree>` in views and action `view_mode`
+- Check `<chatter/>` tag instead of `<div class="oe_chatter">`
+- Check `property _table_query` for reporting models (`_auto = False`) instead of raw SQL `init()`
+- Check `@api.readonly` decorator availability on read-only methods
+- Warn on deprecated `check_access_rights` / `check_access_rule` (use `check_access`)
+- Tour tests registered via `registry.category("web_tour.tours")`
+- Type hints optional (recommended on public APIs)
+- Recommend `SQL()` builder over raw strings
 - Verify rule domains use `company_ids` (`allowed_company_ids` is not a rule variable)
 
 ### Odoo 19
 - Error on `_sql_constraints` (ignored): use `models.Constraint` / `models.Index`
 - Error on `groups_id` / `users` (renamed `group_ids` / `user_ids`)
 - Warn on `read_group`, `toggle_active`, `check_access_rights` (deprecated)
+- Controller `@route(type='json')` deprecated -> use `@route(type='jsonrpc')`
+- `name_get()` removed -> use `_compute_display_name`
 - Check OWL 2.x patterns (Odoo 19 ships Owl 2.8)
 
 ### Odoo 20
@@ -189,21 +206,21 @@ Review each component category:
 - Warn on `pytz`, FontAwesome icons, `_track_subtype`/`_track_template` overrides
 - Apply the official `<odoo_src>/skills/odoo-review` process (house rules + merits pass)
 
-## GitHub Verification
+## Documentation & Pattern Verification
 
-When uncertain about patterns, verify against official Odoo repository using WebFetch.
+When uncertain about patterns, verify against official Odoo documentation using the **Context7 MCP** (`resolve-library-id` + `query-docs` on `/odoo/documentation/__branch__<version>`) or search official repositories.
 
 ### Verification URLs
 
-| Version | Branch URL |
-|---------|------------|
-| 14.0 | `https://github.com/odoo/odoo/tree/14.0` |
-| 15.0 | `https://github.com/odoo/odoo/tree/15.0` |
-| 16.0 | `https://github.com/odoo/odoo/tree/16.0` |
-| 17.0 | `https://github.com/odoo/odoo/tree/17.0` |
-| 18.0 | `https://github.com/odoo/odoo/tree/18.0` |
-| 19.0 | `https://github.com/odoo/odoo/tree/19.0` |
-| 20.0 | `https://github.com/odoo/odoo/tree/20.0` |
+| Version | Branch URL | Context7 Library ID |
+|---------|------------|---------------------|
+| 14.0 | `https://github.com/odoo/odoo/tree/14.0` | `/odoo/documentation/__branch__14.0` |
+| 15.0 | `https://github.com/odoo/odoo/tree/15.0` | `/odoo/documentation/__branch__15.0` |
+| 16.0 | `https://github.com/odoo/odoo/tree/16.0` | `/odoo/documentation/__branch__16.0` |
+| 17.0 | `https://github.com/odoo/odoo/tree/17.0` | `/odoo/documentation/__branch__17.0` |
+| 18.0 | `https://github.com/odoo/odoo/tree/18.0` | `/odoo/documentation/__branch__18.0` |
+| 19.0 | `https://github.com/odoo/odoo/tree/19.0` | `/odoo/documentation/__branch__19.0` |
+| 20.0 | `https://github.com/odoo/odoo/tree/20.0` | `/odoo/documentation` |
 
 ### Key Reference Files
 
@@ -219,44 +236,17 @@ When uncertain about patterns, verify against official Odoo repository using Web
 
 ### How to Verify Patterns
 
-1. **Identify the pattern to verify** (e.g., create() method signature)
-2. **Fetch the reference file** using WebFetch with the raw URL
-3. **Search for the pattern** in the returned content
-4. **Compare** with the code being reviewed
-5. **Report discrepancies** with references to official code
-
-### Example Verification Workflow
-
-```python
-# To verify @api.model_create_multi usage in v18:
-# 1. Fetch: https://raw.githubusercontent.com/odoo/odoo/18.0/addons/sale/models/sale_order.py
-# 2. Search for: "@api.model_create_multi"
-# 3. Confirm pattern matches reviewed code
-
-# To verify view visibility syntax:
-# 1. Fetch: https://raw.githubusercontent.com/odoo/odoo/18.0/addons/sale/views/sale_order_views.xml
-# 2. Search for: 'invisible="'
-# 3. Confirm Python expression syntax (not attrs)
-```
-
-### Verification Commands
-
-Use WebFetch tool with these prompts:
-
-```
-URL: https://raw.githubusercontent.com/odoo/odoo/18.0/addons/sale/models/sale_order.py
-Prompt: "Show the create method signature and decorators used"
-
-URL: https://raw.githubusercontent.com/odoo/odoo/18.0/addons/sale/views/sale_order_views.xml
-Prompt: "Show how invisible attribute is used on buttons"
-```
+1. **Identify the pattern to verify** (e.g., `_table_query` property vs `init()` in v18)
+2. **Query Context7 or inspect reference files** using Context7 docs or web search
+3. **Compare** with the code being reviewed
+4. **Report discrepancies** with references to official patterns and OCA standards
 
 ## Agent Instructions
 
 1. **ALWAYS** identify Odoo version first
 2. **LOAD** version-specific skill files
 3. **SYSTEMATICALLY** review each category
-4. **PRIORITIZE** issues by severity
+4. **PRIORITIZE** issues by severity (Critical / Warning / Suggestion)
 5. **PROVIDE** specific file:line references
 6. **SUGGEST** version-appropriate fixes
-7. **VERIFY** patterns against official sources when needed
+7. **VERIFY** patterns against Context7 docs or official sources when needed
