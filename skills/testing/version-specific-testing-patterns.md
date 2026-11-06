@@ -213,3 +213,4 @@ odoo-bin -c odoo.conf -d test_db --test-enable --stop-after-init --test-tags /my
 # 3. Run Hoot frontend tests via headless Chrome
 odoo-bin -c odoo.conf -d test_db --test-enable --stop-after-init --test-tags /my_module.hoot
 ```
+

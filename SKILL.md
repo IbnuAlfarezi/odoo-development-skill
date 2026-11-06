@@ -102,23 +102,23 @@ When the user asks for a specific functionality, search the categorized `skills/
 | website, portal, public | `skills/frontend/website-integration-patterns.md` |
 | external, api, webhook, sync | `skills/backend/external-api-patterns.md` |
 | logging, debug, error | `skills/testing/logging-debugging-patterns.md` |
-| stock, inventory, warehouse | `skills/functional/stock-inventory-patterns.md` |
-| account, invoice, journal | `skills/functional/accounting-patterns.md` |
-| sale, order, quotation, crm | `skills/functional/sale-crm-patterns.md` |
-| hr, employee, contract | `skills/functional/hr-employee-patterns.md` |
+| stock, inventory, warehouse | `skills/modules/stock-inventory-patterns.md` |
+| account, invoice, journal | `skills/modules/accounting-patterns.md` |
+| sale, order, quotation, crm | `skills/modules/sale-crm-patterns.md` |
+| hr, employee, contract | `skills/modules/hr-employee-patterns.md` |
 | domain, filter, search | `skills/database/domain-filter-patterns.md` |
 | sequence, numbering | `skills/backend/sequence-numbering-patterns.md` |
-| purchase, vendor, procurement | `skills/functional/purchase-procurement-patterns.md` |
-| project, task, timesheet | `skills/functional/project-task-patterns.md` |
+| purchase, vendor, procurement | `skills/modules/purchase-procurement-patterns.md` |
+| project, task, timesheet | `skills/modules/project-task-patterns.md` |
 | context, env, sudo | `skills/backend/context-environment-patterns.md` |
 | portal, token, access | `skills/security/portal-access-patterns.md` |
 | settings, config, parameter | `skills/backend/config-settings-patterns.md` |
 | translation, i18n, language | `skills/backend/translation-i18n-patterns.md` |
 | assets, js, css, scss | `skills/frontend/assets-bundling-patterns.md` |
-| variant, attribute, product | `skills/functional/product-variant-patterns.md` |
-| uom, unit, measure | `skills/functional/uom-patterns.md` |
-| lot, serial, batch | `skills/functional/lot-serial-patterns.md` |
-| tax, fiscal, vat | `skills/functional/tax-fiscal-patterns.md` |
+| variant, attribute, product | `skills/modules/product-variant-patterns.md` |
+| uom, unit, measure | `skills/modules/uom-patterns.md` |
+| lot, serial, batch | `skills/modules/lot-serial-patterns.md` |
+| tax, fiscal, vat | `skills/modules/tax-fiscal-patterns.md` |
 | owl, component, frontend | `skills/frontend/odoo-owl-components.md` |
 | test, unittest, integration | `skills/testing/odoo-test-patterns.md` |
 | manifest, module, depends | `skills/versions/odoo-module-generator.md` |
@@ -127,7 +127,7 @@ When the user asks for a specific functionality, search the categorized `skills/
 | dashboard, kpi, analytics, graph | `skills/frontend/dashboard-kpi-patterns.md` |
 | exception, error, validation | `skills/backend/error-handling-patterns.md` |
 | import, export, csv, excel | `skills/database/import-export-patterns.md` |
-| pricelist, price, discount | `skills/functional/pricelist-pricing-patterns.md` |
+| pricelist, price, discount | `skills/modules/pricelist-pricing-patterns.md` |
 | performance, optimize, index | `skills/database/odoo-performance-guide.md` |
 | troubleshooting, debug, fix | `skills/testing/odoo-troubleshooting-guide.md` |
 | quick, snippet, cheatsheet | `skills/backend/quick-patterns.md` |
@@ -145,9 +145,9 @@ When the user asks for a specific functionality, search the categorized `skills/
 | raw sql, cache flush invalidate, sql builder, partial index | `skills/database/advanced-sql-indexing-patterns.md` |
 | sudo security, privilege escalation, idor, field security | `skills/security/sudo-security-audit-patterns.md` |
 | tour test, mock api, freezegun, httpcase | `skills/testing/mocking-tour-testing-patterns.md` |
-| payment provider, gateway, token, webhook, transaction | `skills/functional/payment-provider-patterns.md` |
-| pos, point of sale, cashier, session, product screen | `skills/functional/pos-point-of-sale-patterns.md` |
-| mrp, manufacturing, bom, production order, workcenter | `skills/functional/mrp-manufacturing-patterns.md` |
+| payment provider, gateway, token, webhook, transaction | `skills/modules/payment-provider-patterns.md` |
+| pos, point of sale, cashier, session, product screen | `skills/modules/pos-point-of-sale-patterns.md` |
+| mrp, manufacturing, bom, production order, workcenter | `skills/modules/mrp-manufacturing-patterns.md` |
 | pre-commit, pylint-odoo, oca quality, test cli, ci/cd | `skills/testing/oca-quality-precommit-patterns.md` |
 | odoo conf, production vs development, workers, dev_mode, proxy_mode | `skills/deploy/odoo-config-patterns.md` |
 | nginx, reverse proxy, ssl certbot, websocket 8072, cookie samesite | `skills/deploy/nginx-proxy-patterns.md` |
@@ -155,6 +155,20 @@ When the user asks for a specific functionality, search the categorized `skills/
 | docker compose, production stack, dev container, debugpy, live mount | `skills/deploy/docker-deployment-patterns.md` |
 | backup, disaster recovery, pg_dump filestore, retention, staging sanitize | `skills/deploy/backup-disaster-recovery-patterns.md` |
 | hoot test, qunit migration, assertQueryCount, performance test, test matrix | `skills/testing/version-specific-testing-patterns.md` |
+| ecommerce, website sale, cart, delivery carrier, shipping, rate shipment | `skills/modules/ecommerce-delivery-patterns.md` |
+| fleet, vehicle, odometer, maintenance equipment, maintenance request | `skills/modules/fleet-maintenance-patterns.md` |
+| leave, time off, allocation, accrual, recruitment, applicant, hr holidays | `skills/modules/hr-advanced-leave-recruitment-patterns.md` |
+| order to cash, o2c, quotation to invoice, customer payment, sales cycle | `skills/functional/flow-order-to-cash.md` |
+| procure to pay, p2p, rfq to bill, 3 way matching, vendor payment, purchase cycle | `skills/functional/flow-procure-to-pay.md` |
+| plan to produce, mrp, bom, workcenter, routing, manufacturing cycle | `skills/functional/flow-plan-to-produce.md` |
+| inventory valuation, perpetual, avco, fifo, landed costs, warehouse logistics | `skills/functional/flow-inventory-valuation-logistics.md` |
+| record to report, r2r, general ledger, chart of accounts, bank reconciliation, period close | `skills/functional/flow-record-to-report.md` |
+| hire to retire, h2r, employee lifecycle, onboarding, payroll, contract | `skills/functional/flow-hire-to-retire.md` |
+| retail omnichannel, pos session, ecommerce checkout, click and collect, cash difference | `skills/functional/flow-retail-omnichannel.md` |
+| project, timesheet, service invoicing, task, helpdesk ticket, sla | `skills/functional/flow-service-project-helpdesk.md` |
+| quality control points, inspection, pass fail, maintenance request, workcenter block | `skills/functional/flow-quality-maintenance-lifecycle.md` |
+| subscription, recurring plan, auto invoicing, auto debit, renewal, churn, mrr | `skills/functional/flow-subscription-recurring-contracts.md` |
+| functional version differences, v14 v15 v16 v17 v18 v19 v20, migration flow | `skills/functional/version-functional-differences.md` |
 
 ### Version-Specific Pattern Files
 
