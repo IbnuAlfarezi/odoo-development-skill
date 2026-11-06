@@ -171,6 +171,9 @@ When the user asks for a specific functionality, search the categorized `skills/
 | functional version differences, v14 v15 v16 v17 v18 v19 v20, migration flow | `skills/functional/version-functional-differences.md` |
 | multi company, branch, inter company rules, subsidiary, financial consolidation, transit | `skills/functional/flow-multi-company-intercompany.md` |
 | accounts receivable, accounts payable, credit limit, dunning, 3 way matching, treasury, closing | `skills/functional/flow-corporate-finance-ap-ar.md` |
+| rest api, bearer auth, api keys, cors, stateless, json envelope | `skills/backend/rest-api-modern-patterns.md` |
+| ormcache, ram memoization, clear_caches, bulk processing, anti oom, invalidate_all | `skills/backend/ormcache-performance-patterns.md` |
+| outbound webhook, hmac signature, event trigger, async dispatch, delivery log | `skills/backend/webhook-event-patterns.md` |
 
 ### Version-Specific Pattern Files
 
