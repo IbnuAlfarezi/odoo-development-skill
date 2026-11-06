@@ -221,8 +221,8 @@ class MyModel(models.Model):
 3. Consider `compute_sudo=True` if computation needs elevated privileges
 
 ### Skill Files Consulted
-- `skills/computed-field-patterns.md` - computed field syntax and decorators
-- `skills/odoo-version-knowledge.md` - v18 type hint recommendations
+- `skills/backend/computed-field-patterns.md` - computed field syntax and decorators
+- `skills/versions/odoo-version-knowledge.md` - v18 type hint recommendations
 ```
 
 ## AGENT INSTRUCTIONS

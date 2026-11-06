@@ -33,16 +33,19 @@ npx skills add fhidalgodev/odoo-development-skill
 odoo-development-skill/
 ├── SKILL.md                 # Main entrypoint for skills.sh
 ├── README.md                # This documentation
-├── agents/                  # 4 refactored workflows
+├── agents/                  # 4 specialized workflows
 │   ├── odoo-context-gatherer.md
 │   ├── odoo-code-reviewer.md
 │   ├── odoo-upgrade-analyzer.md
 │   └── odoo-skill-finder.md
-└── skills/                  # 124 pattern files
-    ├── odoo-version-knowledge.md
-    ├── field-type-reference.md
-    ├── xml-view-patterns.md
-    └── ...
+└── skills/                  # 124 modular pattern files across 7 domains
+    ├── backend/             # Python models, ORM, API, controllers, workflows (22 files)
+    ├── frontend/            # XML views, OWL components, assets, reports (9 files)
+    ├── database/            # Performance, data migration, domains, import/export (4 files)
+    ├── security/            # Security guides, access rules, portal access (1 file)
+    ├── functional/          # Standard ERP modules: stock, account, sale, hr, etc. (11 files)
+    ├── testing/             # Test patterns, troubleshooting, logging/debugging (3 files)
+    └── versions/            # Version-specific patterns (v14-v20) & migration guides (74 files)
 ```
 
 ## 🛠️ Usage
