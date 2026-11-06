@@ -337,3 +337,4 @@ Add credential fields to the `payment.provider` form view conditionally when `co
 2. **Strict Signature Verification**: Always verify `HMAC-SHA256` or `SHA512` before updating transaction state. Reject requests without matching signatures with HTTP 403 `Forbidden`.
 3. **Idempotency**: Webhook notifications may be redelivered. Calling `_set_done()` multiple times on an already confirmed transaction must be idempotent.
 4. **Amount & Currency Validation**: Always check that `gross_amount` matches `tx.amount` and `currency` matches `tx.currency_id.name` to prevent currency-tampering exploits.
+

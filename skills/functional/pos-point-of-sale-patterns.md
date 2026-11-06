@@ -296,3 +296,4 @@ Extend the `OrderReceipt` template to display custom fields on thermal receipts:
 1. **Keep Button Handlers Non-Blocking**: POS operates offline; never perform synchronous network requests without a timeout or fallback.
 2. **Synchronize Custom Data**: If adding custom fields to products or partners, inherit `_loader_params_product_product()` or `_loader_params_res_partner()` on `pos.session` in Python to include them in the initial load payload.
 3. **Respect Taxes & Decimals**: Never recalculate tax lines in JS using simple multiplication; always use the POS tax engine (`this.pos.get_order().get_tax_details()`).
+

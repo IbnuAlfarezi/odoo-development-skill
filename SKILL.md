@@ -149,6 +149,11 @@ When the user asks for a specific functionality, search the categorized `skills/
 | pos, point of sale, cashier, session, product screen | `skills/functional/pos-point-of-sale-patterns.md` |
 | mrp, manufacturing, bom, production order, workcenter | `skills/functional/mrp-manufacturing-patterns.md` |
 | pre-commit, pylint-odoo, oca quality, test cli, ci/cd | `skills/testing/oca-quality-precommit-patterns.md` |
+| odoo conf, production vs development, workers, dev_mode, proxy_mode | `skills/deploy/odoo-config-patterns.md` |
+| nginx, reverse proxy, ssl certbot, websocket 8072, cookie samesite | `skills/deploy/nginx-proxy-patterns.md` |
+| postgres tuning, shared_buffers, work_mem, autovacuum, maintenance | `skills/deploy/postgres-tuning-patterns.md` |
+| docker compose, production stack, dev container, debugpy, live mount | `skills/deploy/docker-deployment-patterns.md` |
+| backup, disaster recovery, pg_dump filestore, retention, staging sanitize | `skills/deploy/backup-disaster-recovery-patterns.md` |
 
 ### Version-Specific Pattern Files
 

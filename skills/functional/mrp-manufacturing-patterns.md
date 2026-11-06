@@ -231,3 +231,4 @@ class MrpProduction(models.Model):
 1. **Avoid Hardcoded Virtual Locations**: Never hardcode location IDs like `14` or `'Virtual Locations/Production'`. Always fetch via `self.env.ref('stock.stock_location_stock')` or `production.location_src_id`.
 2. **Never Bypass `_action_assign()`**: When confirming production, allow the ORM stock reservation engine to create quants and pack operations naturally.
 3. **Respect Unit of Measure (UoM)**: Always verify component conversions between purchase UoM and production BoM UoM (`product.uom_id._compute_quantity()`).
+
