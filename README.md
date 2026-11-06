@@ -38,14 +38,14 @@ odoo-development-skill/
 │   ├── odoo-code-reviewer.md
 │   ├── odoo-upgrade-analyzer.md
 │   └── odoo-skill-finder.md
-└── skills/                  # 124 modular pattern files across 7 domains
+└── skills/                  # 128 modular pattern files across 7 domains
     ├── backend/             # Python models, ORM, API, controllers, workflows (22 files)
-    ├── frontend/            # XML views, OWL components, assets, reports (9 files)
-    ├── database/            # Performance, data migration, domains, import/export (4 files)
+    ├── frontend/            # XML views, OWL components (v15-v20), advanced patterns (23 files)
+    ├── database/            # Performance, concurrency locking, SQL views, migration (6 files)
     ├── security/            # Security guides, access rules, portal access (1 file)
     ├── functional/          # Standard ERP modules: stock, account, sale, hr, etc. (11 files)
-    ├── testing/             # Test patterns, troubleshooting, logging/debugging (3 files)
-    └── versions/            # Version-specific patterns (v14-v20) & migration guides (74 files)
+    ├── testing/             # Test patterns, form view simulation, troubleshooting (4 files)
+    └── versions/            # Version-specific core patterns (v14-v20) & migration guides (61 files)
 ```
 
 ## 🛠️ Usage

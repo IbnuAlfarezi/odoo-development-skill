@@ -119,7 +119,7 @@ When the user asks for a specific functionality, search the categorized `skills/
 | uom, unit, measure | `skills/functional/uom-patterns.md` |
 | lot, serial, batch | `skills/functional/lot-serial-patterns.md` |
 | tax, fiscal, vat | `skills/functional/tax-fiscal-patterns.md` |
-| owl, component, frontend | `skills/versions/odoo-owl-components.md` |
+| owl, component, frontend | `skills/frontend/odoo-owl-components.md` |
 | test, unittest, integration | `skills/testing/odoo-test-patterns.md` |
 | manifest, module, depends | `skills/versions/odoo-module-generator.md` |
 | version, 14, 15, 16, 17, 18, 19, 20 | `skills/versions/odoo-version-knowledge.md` |
@@ -136,6 +136,10 @@ When the user asks for a specific functionality, search the categorized `skills/
 | template, scaffold, boilerplate | `skills/backend/common-module-templates.md` |
 | module generation, example | `skills/backend/module-generation-example.md` |
 | model, abstract, transient | `skills/versions/odoo-model-patterns.md` |
+| sql view, report, bi, auto false | `skills/database/sql-view-reporting-patterns.md` |
+| concurrency, lock, for update, savepoint | `skills/database/concurrency-locking-patterns.md` |
+| form test, onchange test, form helper | `skills/testing/form-testing-patterns.md` |
+| owl patch, bus service, js_class, websocket | `skills/frontend/owl-advanced-patterns.md` |
 
 ### Version-Specific Pattern Files
 
@@ -149,7 +153,7 @@ Available version-specific pattern families:
 - `skills/versions/odoo-version-knowledge-{14..20}.md` and migration guides `{14-15..19-20}.md`
 - `skills/versions/odoo-model-patterns-{14..20}.md` and migration guides
 - `skills/versions/odoo-module-generator-{14..20}.md` and migration guides
-- `skills/versions/odoo-owl-components-{15..20}.md` and migration guides
+- `skills/frontend/odoo-owl-components-{15..20}.md` and migration guides `{15-16..19-20}.md`
 - `skills/versions/odoo-security-guide-{14..20}.md` and migration guides
 
 **Rule:** Always read the corresponding pattern file using file reading tools before generating code. DO NOT guess the syntax if you are unsure.
