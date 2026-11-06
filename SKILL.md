@@ -140,6 +140,8 @@ When the user asks for a specific functionality, search the categorized `skills/
 | concurrency, lock, for update, savepoint | `skills/database/concurrency-locking-patterns.md` |
 | form test, onchange test, form helper | `skills/testing/form-testing-patterns.md` |
 | owl patch, bus service, js_class, websocket | `skills/frontend/owl-advanced-patterns.md` |
+| extensible hooks, prepare vals, batch prefetch | `skills/backend/extensible-hook-patterns.md` |
+| queue_job, async job, webhook hmac, json 2 api | `skills/backend/queue-job-async-patterns.md` |
 
 ### Version-Specific Pattern Files
 
