@@ -154,3 +154,54 @@ FROM pg_stat_activity
 WHERE state != 'idle' AND (now() - pg_stat_activity.query_start) > interval '5 seconds'
 ORDER BY duration DESC;
 ```
+
+---
+
+## 5. Security: Non-Superuser Role Creation (Official Odoo Security Rule)
+
+Official Odoo documentation mandates that the PostgreSQL user used by Odoo **must NOT be a superuser**:
+
+```sql
+-- Connect as postgres administrative superuser:
+-- 1. Create dedicated application role without administrative privileges
+CREATE USER odoo_app WITH 
+    NOSUPERUSER 
+    NOCREATEDB 
+    NOCREATEROLE 
+    ENCRYPTED PASSWORD 'secure_production_password_here';
+
+-- 2. Create production database owned by odoo_app
+CREATE DATABASE production_company_db OWNER odoo_app;
+
+-- 3. Grant schema permissions
+GRANT ALL PRIVILEGES ON DATABASE production_company_db TO odoo_app;
+```
+
+---
+
+## 6. Linux Host OS & Kernel Tuning (`sysctl.conf`)
+
+For servers running PostgreSQL and Odoo multiprocessing workers:
+
+### `/etc/sysctl.conf`:
+```ini
+# Reduce aggressive swapping (PostgreSQL performs poorly when memory pages swap to disk)
+vm.swappiness = 10
+
+# Increase maximum open file descriptors across system
+fs.file-max = 2097152
+
+# Increase network connection backlog queue for high concurrency bursts
+net.core.somaxconn = 4096
+net.ipv4.tcp_max_syn_backlog = 4096
+```
+
+### `/etc/security/limits.conf`:
+```ini
+# Increase user file descriptor limits (prevents 'Too many open files' socket errors)
+odoo soft nofile 65535
+odoo hard nofile 65535
+postgres soft nofile 65535
+postgres hard nofile 65535
+```
+

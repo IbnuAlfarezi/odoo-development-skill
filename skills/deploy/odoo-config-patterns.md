@@ -26,16 +26,20 @@ In production, Odoo **MUST** run in multiprocessing mode (`workers > 0`) behind 
 ; =====================================================================
 db_host = postgres
 db_port = 5432
-db_user = odoo
+db_user = odoo_app                     ; Dedicated NON-SUPERUSER for security (never use 'postgres')
 db_password = secure_production_password_here
 db_name = production_company_db
 db_maxconn = 64
+db_sslmode = prefer                    ; 'prefer', 'require', or 'verify-full'
 db_template = template1
+; db_replica_host = postgres_replica   ; Optional: Read-replica for heavy reporting offloading
+; db_replica_port = 5432
 
 ; =====================================================================
-; 2. Security & Database Access Control
+; 2. Security & Database Access Control (Official Odoo Hardening)
 ; =====================================================================
 ; Disable public database selector (/web/database/manager)
+; Warning: Strongly recommended by official Odoo docs for any internet-facing system!
 list_db = False
 
 ; Lock domain routing strictly to the target company database
@@ -44,6 +48,9 @@ dbfilter = ^production_company_db$
 ; Secure master password hashed with PBKDF2-SHA512
 ; Generate via: python3 -c "import passlib.hash; print(passlib.hash.pbkdf2_sha512.hash('your_master_secret'))"
 admin_passwd = $pbkdf2-sha512$25000$P98B...
+
+; Do NOT install demo data in production under any circumstance
+without_demo = True
 
 ; =====================================================================
 ; 3. Multiprocessing & Resource Limits (Tuned for 4 CPU / 8GB RAM)
@@ -66,13 +73,17 @@ limit_memory_hard = 7516192768
 limit_request = 8192
 
 ; =====================================================================
-; 4. Reverse Proxy & Network Ports
+; 4. Reverse Proxy & File Offloading (X-Accel / X-Sendfile)
 ; =====================================================================
 ; CRITICAL: Must be True behind Nginx to trust X-Forwarded-* client headers
 proxy_mode = True
 http_interface = 0.0.0.0
 http_port = 8069
 gevent_port = 8072
+
+; Performance: Delegate attachment streaming directly to Nginx (X-Accel-Redirect)
+; Saves Python worker memory by letting Nginx stream large documents/attachments
+x_sendfile = True
 
 ; =====================================================================
 ; 5. Logging, Addons & Storage
@@ -171,3 +182,4 @@ export PASSWORD="secure_password"
 # CLI flag overrides
 python3 odoo-bin -c odoo.prod.conf --workers=5 --max-cron-threads=1
 ```
+

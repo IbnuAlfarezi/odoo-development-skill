@@ -154,3 +154,4 @@ INSERT INTO ir_config_parameter (key, value)
 VALUES ('web.base.url.freeze', 'True')
 ON CONFLICT (key) DO UPDATE SET value = 'True';
 ```
+

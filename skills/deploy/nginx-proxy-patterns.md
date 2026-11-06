@@ -39,6 +39,16 @@ map $http_upgrade $connection_upgrade {
     ''      close;
 }
 
+# Content-Security-Policy for static image responses (Official Odoo Recommendation)
+map $sent_http_content_type $content_type_csp {
+    default "";
+    ~image/ "default-src 'none'";
+}
+
+# Rate Limiting Zones (Anti-Brute Force & Anti-DDoS)
+limit_req_zone $binary_remote_addr zone=odoo_login_zone:10m rate=5r/m;
+limit_req_zone $binary_remote_addr zone=odoo_api_zone:10m rate=30r/m;
+
 # =====================================================================
 # Server Block: HTTP -> HTTPS Redirect
 # =====================================================================
@@ -123,7 +133,59 @@ server {
     }
 
     # =================================================================
-    # Location 2: Standard Odoo Web Requests
+    # Location 2: Anti-Brute Force Protection on Login
+    # =================================================================
+    location /web/login {
+        limit_req zone=odoo_login_zone burst=10 nodelay;
+        proxy_pass http://odoo_backend;
+        proxy_set_header X-Forwarded-Host $http_host;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_set_header X-Real-IP $remote_addr;
+        proxy_cookie_flags session_id samesite=lax secure;
+    }
+
+    # =================================================================
+    # Location 3: Rate Limiting on External XML-RPC / JSON-RPC APIs
+    # =================================================================
+    location ~ ^/(xmlrpc|jsonrpc) {
+        limit_req zone=odoo_api_zone burst=20 nodelay;
+        proxy_pass http://odoo_backend;
+        proxy_set_header X-Forwarded-Host $http_host;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_set_header X-Real-IP $remote_addr;
+    }
+
+    # =================================================================
+    # Location 4: Edge Restriction of Database Manager (Official Odoo Hardening)
+    # =================================================================
+    # Block public access to dangerous database creation/drop/restore screens
+    location ~ ^/web/database/(manager|create|duplicate|drop|backup) {
+        allow 10.0.0.0/8;          # Internal VPN
+        allow 192.168.1.0/24;      # Office LAN
+        deny all;                  # Block all public internet traffic
+        
+        proxy_pass http://odoo_backend;
+        proxy_set_header X-Forwarded-Host $http_host;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_set_header X-Forwarded-Proto $scheme;
+        proxy_set_header X-Real-IP $remote_addr;
+    }
+
+    # =================================================================
+    # Location 5: Attachment Offloading via Nginx X-Accel (Official Odoo Deploy)
+    # =================================================================
+    # Delegates file serving directly to Nginx, saving Python worker RAM
+    location /web/filestore {
+        internal;
+        alias /var/lib/odoo/filestore;
+        add_header Content-Security-Policy $upstream_http_content_security_policy;
+        add_header X-Content-Type-Options nosniff;
+    }
+
+    # =================================================================
+    # Location 6: Standard Odoo Web Requests
     # =================================================================
     location / {
         proxy_pass http://odoo_backend;
@@ -139,7 +201,7 @@ server {
     }
 
     # =================================================================
-    # Location 3: Static Asset Caching (JS, CSS, Images, Fonts)
+    # Location 7: Static Asset Caching (JS, CSS, Images, Fonts)
     # =================================================================
     location ~* \.(js|css|png|jpg|jpeg|gif|ico|woff|woff2|ttf|svg)$ {
         proxy_pass http://odoo_backend;
@@ -147,6 +209,7 @@ server {
         proxy_buffering on;
         expires 7d;
         add_header Cache-Control "public, no-transform";
+        add_header Content-Security-Policy $content_type_csp;
     }
 }
 ```
@@ -168,6 +231,34 @@ sudo certbot renew --dry-run
 
 ---
 
+## 3. Fail2ban Integration for Automated Login IP Banning
+
+Configure Fail2ban to parse `/var/log/odoo/odoo-server.log` and automatically drop IP addresses that repeatedly fail authentication:
+
+### Filter: `/etc/fail2ban/filter.d/odoo-login.conf`
+```ini
+[Definition]
+failregex = ^ \d+ INFO \S+ \S+ Login failed for db:\S+ user:\S+ from <HOST>
+ignoreregex =
+```
+
+### Jail: `/etc/fail2ban/jail.d/odoo.conf`
+```ini
+[odoo-login]
+enabled = true
+port = http,https
+filter = odoo-login
+logpath = /var/log/odoo/odoo-server.log
+maxretry = 5
+findtime = 600
+bantime = 3600
+action = iptables-multiport[name=Odoo, port="http,https"]
+```
+sudo certbot renew --dry-run
+```
+
+---
+
 ## 3. Critical Verification Steps
 
 1. **Verify WebSocket Upgrade**:
@@ -176,3 +267,4 @@ sudo certbot renew --dry-run
    In Python backend, check `request.httprequest.remote_addr`. If it returns `127.0.0.1`, verify that `proxy_mode = True` is enabled in `odoo.conf` and `proxy_set_header X-Forwarded-For` is present in Nginx.
 3. **Verify Upload Limits**:
    If uploading attachments larger than 1MB fails with `413 Request Entity Too Large`, confirm that `client_max_body_size` is explicitly configured in Nginx.
+

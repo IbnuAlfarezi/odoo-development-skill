@@ -201,3 +201,4 @@ To set breakpoints in your local editor (VS Code, Cursor, Windsurf, Antigravity)
 | **Process Debugger**| `debugpy` enabled | **Disabled** (multiprocessing enabled) |
 | **Restart Policy** | `unless-stopped` | `always` |
 | **Data Volumes** | Ephemeral or local named volumes | High-speed dedicated persistent volumes |
+
