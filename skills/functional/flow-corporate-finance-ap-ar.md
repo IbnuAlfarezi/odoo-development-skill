@@ -227,3 +227,4 @@ Enterprises avoid direct transfers between balance sheet bank accounts to mainta
 | **Credit Limit Enforcement** | Third-party module or custom code required. | Native **Customer Credit Limits** in core settings (Warning / Block). | Real-time automated credit limit check across parent companies and child subsidiaries. |
 | **Vendor Bill Digitization (OCR)**| Manual credit-based OCR service. | Built-in side-by-side PDF viewer with automated vendor bank extraction. | Automated matching against Purchase Orders with zero-click bill posting. |
 | **Bank Transit Accounts** | Single default transit account shared across company. | Dedicated incoming and outgoing payment transit accounts per bank journal. | Automated transit clearing models with AI-driven bank charge write-offs. |
+
