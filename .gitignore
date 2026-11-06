@@ -77,3 +77,6 @@ ERRORS.md
 
 # Archives
 *.zip
+
+# Agent local files
+.agents/

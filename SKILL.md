@@ -145,6 +145,10 @@ When the user asks for a specific functionality, search the categorized `skills/
 | raw sql, cache flush invalidate, sql builder, partial index | `skills/database/advanced-sql-indexing-patterns.md` |
 | sudo security, privilege escalation, idor, field security | `skills/security/sudo-security-audit-patterns.md` |
 | tour test, mock api, freezegun, httpcase | `skills/testing/mocking-tour-testing-patterns.md` |
+| payment provider, gateway, token, webhook, transaction | `skills/functional/payment-provider-patterns.md` |
+| pos, point of sale, cashier, session, product screen | `skills/functional/pos-point-of-sale-patterns.md` |
+| mrp, manufacturing, bom, production order, workcenter | `skills/functional/mrp-manufacturing-patterns.md` |
+| pre-commit, pylint-odoo, oca quality, test cli, ci/cd | `skills/testing/oca-quality-precommit-patterns.md` |
 
 ### Version-Specific Pattern Files
 

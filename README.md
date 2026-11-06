@@ -11,7 +11,7 @@ This repository is a fork and adaptation of the Odoo plugin from [letzdoo/claude
 - **OWL Compatibility**: Knowledge of OWL 1.x (v15), 2.x (v16-19), and 3.x (v20).
 - **Odoo 20 Ready**: `ir.access` security, OWL 3, `BinaryValue`, `zoneinfo`, Material Symbols icons and the 19→20 migration path (`odoo-bin upgrade_code`).
 - **Specialized Agents**: Includes 4 workflows (agents) for Context Gathering, Code Review, Upgrade Analysis, and Skill Discovery.
-- **133 Skill Patterns**: Detailed copy-paste ready code snippets for every functional domain in Odoo.
+- **137 Skill Patterns**: Detailed copy-paste ready code snippets for every functional domain in Odoo.
 
 ## 📦 Installation
 
@@ -38,13 +38,13 @@ odoo-development-skill/
 │   ├── odoo-code-reviewer.md
 │   ├── odoo-upgrade-analyzer.md
 │   └── odoo-skill-finder.md
-└── skills/                  # 133 modular pattern files across 7 domains
+└── skills/                  # 137 modular pattern files across 7 domains
     ├── backend/             # Python models, ORM, hooks, queue_job, API, controllers (24 files)
     ├── frontend/            # XML views, OWL components (v15-v20), advanced patterns (23 files)
     ├── database/            # Performance, raw SQL cache sync, locking, SQL views (7 files)
     ├── security/            # Security guides (v14-v20), safe sudo & IDOR audit, portal access (17 files)
-    ├── functional/          # Standard ERP modules: stock, account, sale, hr, etc. (11 files)
-    ├── testing/             # Test patterns, form view simulation, tour tests, mocking (5 files)
+    ├── functional/          # Standard ERP modules: stock, account, mrp, pos, payment, sale, hr (14 files)
+    ├── testing/             # Test patterns, form view simulation, tour tests, mocking, OCA CI (6 files)
     └── versions/            # Version-specific core patterns (v14-v20) & migration guides (46 files)
 ```
 
