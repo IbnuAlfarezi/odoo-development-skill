@@ -89,7 +89,7 @@ When the user asks for a specific functionality, search the categorized `skills/
 | qweb, template, t-if, t-foreach | `skills/frontend/qweb-template-patterns.md` |
 | action, window, server, client | `skills/frontend/action-patterns.md` |
 | menu, navigation, menuitem | `skills/frontend/menu-navigation-patterns.md` |
-| security, access, rule, group | `skills/versions/odoo-security-guide.md` |
+| security, access, rule, group | `skills/security/odoo-security-guide.md` |
 | workflow, state, statusbar | `skills/backend/workflow-state-patterns.md` |
 | wizard, transient, dialog | `skills/backend/wizard-patterns.md` |
 | report, pdf, print | `skills/frontend/report-patterns.md` |
@@ -142,10 +142,13 @@ When the user asks for a specific functionality, search the categorized `skills/
 | owl patch, bus service, js_class, websocket | `skills/frontend/owl-advanced-patterns.md` |
 | extensible hooks, prepare vals, batch prefetch | `skills/backend/extensible-hook-patterns.md` |
 | queue_job, async job, webhook hmac, json 2 api | `skills/backend/queue-job-async-patterns.md` |
+| raw sql, cache flush invalidate, sql builder, partial index | `skills/database/advanced-sql-indexing-patterns.md` |
+| sudo security, privilege escalation, idor, field security | `skills/security/sudo-security-audit-patterns.md` |
+| tour test, mock api, freezegun, httpcase | `skills/testing/mocking-tour-testing-patterns.md` |
 
 ### Version-Specific Pattern Files
 
-Many patterns have **version-specific variants** located in `skills/versions/{pattern}-{version}.md`. When generating code for a specific Odoo version, always check if a version-specific file exists in `skills/versions/`:
+Many patterns have **version-specific variants** located in `skills/versions/{pattern}-{version}.md` (or domain folders like `skills/frontend/` and `skills/security/`). When generating code for a specific Odoo version, always check if a version-specific file exists:
 
 - **Single version:** `skills/versions/{pattern}-{version}.md` (e.g., `skills/versions/odoo-model-patterns-18.md`)
 - **Migration guide:** `skills/versions/{pattern}-{sourceV}-{targetV}.md` (e.g., `skills/versions/odoo-model-patterns-17-18.md`)
@@ -156,6 +159,6 @@ Available version-specific pattern families:
 - `skills/versions/odoo-model-patterns-{14..20}.md` and migration guides
 - `skills/versions/odoo-module-generator-{14..20}.md` and migration guides
 - `skills/frontend/odoo-owl-components-{15..20}.md` and migration guides `{15-16..19-20}.md`
-- `skills/versions/odoo-security-guide-{14..20}.md` and migration guides
+- `skills/security/odoo-security-guide-{14..20}.md` and migration guides `{14-15..19-20}.md`
 
 **Rule:** Always read the corresponding pattern file using file reading tools before generating code. DO NOT guess the syntax if you are unsure.
