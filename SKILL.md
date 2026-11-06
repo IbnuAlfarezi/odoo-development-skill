@@ -154,6 +154,7 @@ When the user asks for a specific functionality, search the categorized `skills/
 | postgres tuning, shared_buffers, work_mem, autovacuum, maintenance | `skills/deploy/postgres-tuning-patterns.md` |
 | docker compose, production stack, dev container, debugpy, live mount | `skills/deploy/docker-deployment-patterns.md` |
 | backup, disaster recovery, pg_dump filestore, retention, staging sanitize | `skills/deploy/backup-disaster-recovery-patterns.md` |
+| hoot test, qunit migration, assertQueryCount, performance test, test matrix | `skills/testing/version-specific-testing-patterns.md` |
 
 ### Version-Specific Pattern Files
 

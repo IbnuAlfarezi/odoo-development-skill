@@ -55,11 +55,18 @@ class TestMyModuleCommon(TransactionCase):
         })
 
         # Create test user with specific groups
+        # Note on Version Compatibility:
+        # - v14-v18: field name is 'groups_id'
+        # - v19+: field name is renamed to 'group_ids'
+        # - v16+: use Command.set() instead of (6, 0, [...])
+        from odoo.fields import Command
+
+        group_field = 'group_ids' if 'group_ids' in cls.env['res.users']._fields else 'groups_id'
         cls.user_manager = cls.env['res.users'].create({
             'name': 'Test Manager',
             'login': 'test_manager',
             'email': 'manager@example.com',
-            'groups_id': [(6, 0, [
+            group_field: [Command.set([
                 cls.env.ref('base.group_user').id,
                 cls.env.ref('my_module.group_manager').id,
             ])],
@@ -69,7 +76,7 @@ class TestMyModuleCommon(TransactionCase):
             'name': 'Test User',
             'login': 'test_user',
             'email': 'user@example.com',
-            'groups_id': [(6, 0, [
+            group_field: [Command.set([
                 cls.env.ref('base.group_user').id,
             ])],
         })
@@ -474,6 +481,41 @@ def test_check_company_auto(self):
             'partner_id': partner_c2.id,  # Different company
         })
 ```
+
+### v19+ Testing `models.Constraint`
+
+In Odoo 19+, `_sql_constraints` is ignored. Model constraints use `models.Constraint`:
+
+```python
+def test_unique_name_constraint(self):
+    """Test models.Constraint violation (v19+)"""
+    from odoo.exceptions import ValidationError
+
+    self.env['my.model'].create({'name': 'Unique Code 123'})
+    with self.assertRaises(ValidationError):
+        self.env['my.model'].create({'name': 'Unique Code 123'})
+```
+
+### v20+ Testing `ir.access` Security
+
+In Odoo 20, security access rules are unified under `ir.access` (`security/ir.access.csv`):
+
+```python
+def test_user_read_access_v20(self):
+    """Test user access with unified ir.access in v20"""
+    from odoo.exceptions import AccessError
+
+    # with_user() switches execution context to restricted user
+    record = self.env['my.model'].create({'name': 'Confidential Record'})
+    user_record = record.with_user(self.user_basic)
+
+    # In v20, check_access replaces check_access_rights / check_access_rule
+    self.assertTrue(user_record.has_access('read'))
+    with self.assertRaises(AccessError):
+        user_record.check_access('unlink')
+```
+
+For deep cross-version differences, performance assertions with `assertQueryCount`, and modern `@odoo/hoot` testing, see `skills/testing/version-specific-testing-patterns.md`.
 
 ## Running Tests
 
